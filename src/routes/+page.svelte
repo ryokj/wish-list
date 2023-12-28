@@ -22,17 +22,25 @@
   }
 </script>
 
-<section>
-  <div>
-    <h1>✅ Wish List</h1>
-    <div>
-      <input type="text" bind:value={itemName} />
-      <button on:click={addItem}>Add Item</button>
+<section class="flex justify-center">
+  <div class="border rounded m-10 p-10 space-y-5 w-[600px]">
+    <h1 class="text-3xl font-bold">✅ Wish List</h1>
+    <div class="flex space-x-2">
+      <input
+        type="text"
+        bind:value={itemName}
+        class="border border-gray-500 rounded py-1 px-2 grow"
+      />
+      <button on:click={addItem} class="border border-gray-500 rounded bg-gray-200 py-1 px-2"
+        >Add Item</button
+      >
     </div>
-    <ul>
+    <ul class="space-y-2">
       {#each wishList as item (item.id)}
-        <li>
-          <p><span>✔</span><span>{item.name}</span></p>
+        <li
+          class="flex justify-between border border-gray-200 py-1 px-2 space-x-2 rounded hover:bg-orange-100"
+        >
+          <p class="flex space-x-2"><span>✔</span><span>{item.name}</span></p>
           <button on:click={() => delItem(item)}>🗑️</button>
         </li>
       {/each}
