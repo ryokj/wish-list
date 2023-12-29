@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { addDoc, collection } from 'firebase/firestore';
+  import { db } from '$lib/firebase';
+
   type Item = {
-    id: string;
+    id?: string;
     name: string;
   };
 
@@ -13,7 +16,10 @@
 
   function addItem() {
     if (itemName === '') return;
-    wishList = [...wishList, { id: `dummy-id-${++id}`, name: itemName }];
+    const item: Item = {
+      name: itemName
+    };
+    addDoc(collection(db, 'wishlist'), item);
     itemName = '';
   }
 
