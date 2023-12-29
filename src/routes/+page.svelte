@@ -8,6 +8,8 @@
     serverTimestamp,
     FieldValue,
     orderBy,
+    deleteDoc,
+    doc,
     type DocumentData
   } from 'firebase/firestore';
   import { db } from '$lib/firebase';
@@ -32,7 +34,8 @@
   }
 
   function delItem(item: Item) {
-    wishList = wishList.filter((v) => v.id !== item.id);
+    if (!item.id) return;
+    deleteDoc(doc(db, 'wishlist', item.id));
   }
 
   onSnapshot(
