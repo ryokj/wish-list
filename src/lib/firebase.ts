@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 import {
   PUBLIC_API_KEY,
   PUBLIC_AUTH_DOMAIN,
@@ -18,3 +19,4 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const db: Firestore = getFirestore(app);
