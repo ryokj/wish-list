@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { addDoc, collection } from 'firebase/firestore';
+  import {
+    addDoc,
+    collection,
+    onSnapshot,
+    query,
+    QuerySnapshot,
+    type DocumentData
+  } from 'firebase/firestore';
   import { db } from '$lib/firebase';
 
   type Item = {
@@ -7,12 +14,8 @@
     name: string;
   };
 
-  let id = 0;
   let itemName: string = '';
-  let wishList: Item[] = [
-    { id: `dummy-id-${++id}`, name: 'Apple' },
-    { id: `dummy-id-${++id}`, name: 'Orange' }
-  ];
+  let wishList: Item[] = [];
 
   function addItem() {
     if (itemName === '') return;
@@ -26,6 +29,17 @@
   function delItem(item: Item) {
     wishList = wishList.filter((v) => v.id !== item.id);
   }
+
+  onSnapshot(query(collection(db, 'wishlist')), (snapshot: QuerySnapshot) => {
+    wishList = snapshot.docs.map((doc) => {
+      const data: DocumentData = doc.data();
+      const item: Item = {
+        id: doc.id,
+        name: data.name
+      };
+      return item;
+    });
+  });
 </script>
 
 <section class="flex justify-center">
