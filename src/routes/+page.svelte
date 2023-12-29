@@ -5,6 +5,9 @@
     onSnapshot,
     query,
     QuerySnapshot,
+    serverTimestamp,
+    FieldValue,
+    orderBy,
     type DocumentData
   } from 'firebase/firestore';
   import { db } from '$lib/firebase';
@@ -12,6 +15,7 @@
   type Item = {
     id?: string;
     name: string;
+    timestamp: FieldValue;
   };
 
   let itemName: string = '';
@@ -20,7 +24,8 @@
   function addItem() {
     if (itemName === '') return;
     const item: Item = {
-      name: itemName
+      name: itemName,
+      timestamp: serverTimestamp()
     };
     addDoc(collection(db, 'wishlist'), item);
     itemName = '';
@@ -30,16 +35,20 @@
     wishList = wishList.filter((v) => v.id !== item.id);
   }
 
-  onSnapshot(query(collection(db, 'wishlist')), (snapshot: QuerySnapshot) => {
-    wishList = snapshot.docs.map((doc) => {
-      const data: DocumentData = doc.data();
-      const item: Item = {
-        id: doc.id,
-        name: data.name
-      };
-      return item;
-    });
-  });
+  onSnapshot(
+    query(collection(db, 'wishlist'), orderBy('timestamp', 'desc')),
+    (snapshot: QuerySnapshot) => {
+      wishList = snapshot.docs.map((doc) => {
+        const data: DocumentData = doc.data();
+        const item: Item = {
+          id: doc.id,
+          name: data.name,
+          timestamp: data.timestamp
+        };
+        return item;
+      });
+    }
+  );
 </script>
 
 <section class="flex justify-center">
