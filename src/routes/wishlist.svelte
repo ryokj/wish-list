@@ -12,7 +12,8 @@
     doc,
     type DocumentData
   } from 'firebase/firestore';
-  import { db } from '$lib/firebase';
+  import { db, auth } from '$lib/firebase';
+  import { signOut } from 'firebase/auth';
 
   type Item = {
     id?: string;
@@ -77,5 +78,8 @@
         </li>
       {/each}
     </ul>
+  </div>
+  <div class="fixed right-2 top-2">
+    <button class="underline" on:click={() => signOut(auth)}>Logout</button>
   </div>
 </section>
