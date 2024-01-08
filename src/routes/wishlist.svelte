@@ -10,15 +10,19 @@
     orderBy,
     deleteDoc,
     doc,
+    where,
     type DocumentData
   } from 'firebase/firestore';
   import { db, auth } from '$lib/firebase';
   import { signOut } from 'firebase/auth';
 
+  export let userId: string;
+
   type Item = {
     id?: string;
     name: string;
     timestamp: FieldValue;
+    uid: string;
   };
 
   let itemName: string = '';
@@ -28,7 +32,8 @@
     if (itemName === '') return;
     const item: Item = {
       name: itemName,
-      timestamp: serverTimestamp()
+      timestamp: serverTimestamp(),
+      uid: userId
     };
     addDoc(collection(db, 'wishlist'), item);
     itemName = '';
@@ -40,14 +45,15 @@
   }
 
   onSnapshot(
-    query(collection(db, 'wishlist'), orderBy('timestamp', 'desc')),
+    query(collection(db, 'wishlist'), where('uid', '==', userId), orderBy('timestamp', 'desc')),
     (snapshot: QuerySnapshot) => {
       wishList = snapshot.docs.map((doc) => {
         const data: DocumentData = doc.data();
         const item: Item = {
           id: doc.id,
           name: data.name,
-          timestamp: data.timestamp
+          timestamp: data.timestamp,
+          uid: userId
         };
         return item;
       });

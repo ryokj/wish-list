@@ -11,7 +11,7 @@
 </script>
 
 {#if userId}
-  <Wishlist />
+  <Wishlist {userId} />
 {:else if userId === null}
   <Signin />
 {:else}

@@ -1,4 +1,12 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionId": "wishlist",
+      "fields": [
+        { "fieldPath": "uid", "mode": "DESCENDING" },
+        { "fieldPath": "timestamp", "mode": "DESCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }
